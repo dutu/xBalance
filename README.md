@@ -14,7 +14,6 @@ The application code is shared on github at https://github.com/dutu/XBalance/
 * [Updating the application](#updating-the-application)
     * Running locally
     * Running on Heroku
-* [poloLender Pro configuration](#ploLender-pro-configuration)
 * [FAQ](#faq)
 * [License](#license) 
 
