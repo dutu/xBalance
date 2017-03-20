@@ -1,9 +1,22 @@
 export let accounts = [
   {
-    accountName: '',
+    accountName: 'Bitstamp account1',
     exchange: 'bitstamp',
-    apiKey: '',
-    apiSecret: '',
-    userId: '',
+    api: {
+      key: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+      secret: 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
+      clientId: '123456',   // required for Bitstamp and CEX.io
+      passphrase: '', // required for Gdax
+    },
+  },
+  {
+    accountName: 'Bitstamp account2',
+    exchange: 'bitstamp',
+    api: {
+      key: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      secret: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      clientId: '456789',   // required for Bitstamp and CEX.io
+      passphrase: '', // required for Gdax
+    },
   },
 ];
