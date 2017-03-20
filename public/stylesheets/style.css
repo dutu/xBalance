@@ -1,8 +1,7 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
+.header {
+  font-family:'PT Sans',Tahoma;
+  font-size: 28px;
+  line-height: 32px;
+  text-align: center;
+  color: #3498DB;
 }

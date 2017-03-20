@@ -46,7 +46,8 @@ let getRate = function getRate(cryptox, currencyA, currencyB, callback) {
 
 let getAccountBalance = function (balances, account, callback) {
   let cryptox = new Cryptox(account.exchange, { key: account.api.key, secret: account.api.secret, username: account.api.clientId, passphrase: account.api.passphrase });
-  cryptox.getBalance({}, function (err, balance) {
+  let options = account.exchange === 'poloniex' && { account: 'all' } || {};
+  cryptox.getBalance(options, function (err, balance) {
     let result = {
       exchange: account.exchange,
       accountName: account.accountName,
@@ -80,7 +81,8 @@ let getAccountBalance = function (balances, account, callback) {
                 if (rate) {
                   worthBTC = amount.times(rate).toFixed(8);
                 }
-                result.totalBalance.push({ currency: currencyBalance.currency === 'XBT' && 'BTC' || currencyBalance.currency, amount: amount.toString(), worthBTC: worthBTC });
+
+                result.totalBalance.push({ currency: currencyBalance.currency === 'XBT' && 'BTC' || currencyBalance.currency, amount: amount.toFixed(8), worthBTC: worthBTC });
                 callback(null);
               });
             } else {

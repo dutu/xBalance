@@ -1,5 +1,10 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/webix/webix.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/webix/webix.js')
+    script(src='/faye/faye-browser-min.js')
+  body
+    script(src='/javascripts/content.js')

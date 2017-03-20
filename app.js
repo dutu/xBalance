@@ -11,14 +11,12 @@ import http from 'http';
 import { log } from './server/logger';
 
 import { router as index } from './routes/index';
-import { router as users } from './routes/users';
 import { api } from './routes/api';
-import { getAccountsBalance } from './server/xBalance'
+import { publish } from './server/publish';
 
-/**
- * Event listener for HTTP server "error" event.
- */
-let onError = function onError(error) {
+const Faye = require('faye');
+
+const onError = function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -45,9 +43,6 @@ let onError = function onError(error) {
   }
 };
 
-/**
- * Event listener for HTTP server "listening" event.
- */
 const onListening = function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string'
@@ -72,25 +67,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('json spaces', 2);
 
 app.use('/', index);
-app.use('/users', users);
 
 // JSON API
 app.get('/api/getBalances', api.getBalances);
-/*
- app.get('/api/post/:id', api.post);
- app.post('/api/post', api.addPost);
- app.put('/api/post/:id', api.editPost);
- app.delete('/api/post/:id', api.deletePost);
- */
-
-/*
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  let err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-*/
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -110,6 +89,11 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-getAccountsBalance(function (balances) {
+let fayeServer = http.createServer();
+let bayeux = new Faye.NodeAdapter({mount: '/'});
+bayeux.attach(fayeServer);
+fayeServer.listen(8000);
+fayeServer.on('error', onError);
+fayeServer.on('listening', onListening);
 
-});
+publish();
