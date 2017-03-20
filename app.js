@@ -13,6 +13,7 @@ import { log } from './server/logger';
 import { router as index } from './routes/index';
 import { router as users } from './routes/users';
 import { api } from './routes/api';
+import { getAccountsBalance } from './server/xBalance'
 
 /**
  * Event listener for HTTP server "error" event.
@@ -52,7 +53,7 @@ const onListening = function onListening() {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug(`Listening on ${bind}`);
+  log.info(`Listening on ${bind}`);
 };
 
 const app = express();
@@ -108,3 +109,7 @@ let server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+getAccountsBalance(function (balances) {
+
+});

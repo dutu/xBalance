@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "node.js app for getting your accounts balance from multiple cryptocurency exchanges",
   "author": "Adrian Clinciu <adrian.clinciu@outlook.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/dutu/xBalance.git"
@@ -30,11 +31,15 @@
     "start": "node -r babel-register app.js"
   },
   "dependencies": {
+    "async": "^2.1.5",
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.3",
+    "cryptox": "^1.1.1",
     "debug": "~2.6.0",
     "express": "~4.14.1",
     "jade": "~1.11.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.0",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.2",
     "winston": "~2.3.1"
