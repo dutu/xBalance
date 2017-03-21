@@ -3,7 +3,7 @@ xBalance - get your accounts balance from multiple cryptocurency exchanges
 
 **xBalance** is a node.js app for getting your accounts balance from multiple cryptocurency exchanges.
 
-The application code is shared on github at https://github.com/dutu/XBalance/
+The application code is shared on github at https://github.com/dutu/xBalance/
 
 ### Contents
 * [How it works](#how-it-works)
@@ -28,12 +28,14 @@ xBalance is:
 
 The application gets balance of your accounts from multiple cryptocurency exchanges. 
 
+### Example screenshot:
+
+![](http://i.imgur.com/HiX3yz4.jpg)
+
+
 
 # Setting up the application
 
-Running on Heroku is highly recommended to ensure maximum up-time. 
-
-    
 ## Running locally
 
 1. [Download and install node.js](http://nodejs.org/)
@@ -55,11 +57,16 @@ Running on Heroku is highly recommended to ensure maximum up-time.
 5. Setup accounts name and API keyes for your accounts :
     Rename the file `accounts-template.js` to `accounts.js`, then update the file with your own values
     
-5. Start the app locally:
+6. Start the app locally:
 
     ```
     npm start
     ```
+
+7. Get your balances by opening http://localhost:3000/ with your internet browser
+
+8. Get your balances raw data by opening http://localhost:3000/api/getBalances with your internet browser
+
     
 ## Running on Heroku
 

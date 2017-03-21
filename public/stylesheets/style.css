@@ -5,3 +5,8 @@
   text-align: center;
   color: #3498DB;
 }
+
+.row-error{
+  background-color: #ce5545;
+  color: white;
+}
