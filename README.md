@@ -22,11 +22,11 @@ The application code is shared on github at https://github.com/dutu/xBalance/
 
 xBalance is:
 
-- an **open source** node.js application
+- an **open source** application
 - runs on [node.js](http://nodejs.org/)
 - can either run locally on your computer or can be hosted on a cloud platform (e.g. [Heroku](http://www.heroku.com "Heroku")).
 
-The application gets balance of your accounts from multiple cryptocurency exchanges. 
+The application gets the balance of your accounts from multiple cryptocurency exchanges. 
 
 ### Example screenshot:
 

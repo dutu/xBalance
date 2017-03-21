@@ -18,7 +18,10 @@
     "etherum",
     "eth",
     "xmr",
-    "monero"
+    "monero",
+    "xbalance",
+    "crypto",
+    "balance"
   ],
   "bugs": {
     "url": "https://github.com/dutu/xBalance/issues"

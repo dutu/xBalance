@@ -21,8 +21,6 @@ let header = {
   data: { value: 'xBalance' },
 };
 
-let accountSettingsView = { id: 'accountSettings', rows:[{ id: 'accountSettingsTab', template: 'Coming soon...' }] };
-
 let tooltip = function tooltip(obj) {
   if (obj.tooltip) {
     return obj.tooltip;
@@ -96,7 +94,8 @@ let tabview = {
   animate: { type: "flip", subtype: "vertical" },
   cells:[
     { header: "Balance", body: balanceView },
-    { header: "Settings", body: accountSettingsView },
+    { header: "Settings", body: settingsView },
+    { header: "About", body: aboutView },
   ],
 };
 
