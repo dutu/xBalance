@@ -30,7 +30,7 @@ let tooltip = function tooltip(obj) {
 };
 
 let columns = [
-  { id: "timestamp",	header: "Date", sort: "int", autowidth: true, format: webix.Date.dateToStr("%Y-%m-%d %H:%i:%s"), footer:{text:"Total:", colspan:3}, adjust:true, tooltip: tooltip },
+  { id: "timestamp",	header: "Date", sort: "int", autowidth: true, format: webix.Date.dateToStr("%Y-%m-%d %H:%i"), footer:{text:"Total:", colspan:3}, adjust:true, tooltip: tooltip },
   { id: "exchange",	header: "Exchange", sort: "string", adjust:true, tooltip: tooltip  },
   { id: "accountName", header:"Account name", autowidth: true, adjust:true, sort: "string", tooltip: tooltip  },
   { id: "subAccount", header:"Subaccount", autowidth: true, adjust:true, sort: "string", tooltip: tooltip  },
@@ -106,13 +106,13 @@ function alignRight(value, config){
 let updateBalanceTable = function updateBalanceTable(balances) {
   let balanceTable = [];
   let columnsTable = [
-    { id: "timestamp",	header: "Date", sort: "int", autowidth: true, format: webix.Date.dateToStr("%Y-%m-%d %H:%i:%s"), footer:{text:"Total:", colspan:3}, adjust:true, tooltip: tooltip },
-    { id: "exchange",	header: "Exchange", sort: "string", adjust:true, tooltip: tooltip  },
-    { id: "accountName", header:"Account name", autowidth: true, adjust:true, sort: "string", tooltip: tooltip  },
-    { id: "subAccount", header:"Subaccount", autowidth: true, adjust:true, sort: "string", tooltip: tooltip  },
+    { id: "timestamp",	header: "Date", sort: "int", autowidth: true, format: webix.Date.dateToStr('%Y-%m-%d %H:%i'), footer: { text: 'Total:', colspan: 3 }, adjust: true, tooltip: tooltip },
+    { id: "exchange",	header: "Exchange", sort: "string", adjust: true, tooltip: tooltip },
+    { id: "accountName", header:"Account name", autowidth: true, adjust: true, sort: "string", tooltip: tooltip  },
+    { id: "subAccount", header:"Subaccount", autowidth: true, adjust: true, sort: "string", tooltip: tooltip  },
   ];
 
-  columnsTable.push({ id: 'worthBTC',	header: {text: 'worthBTC', css:{ "text-align":"center" } }, cssFormat: alignRight, sort: "int", autowidth: true, adjust:true, tooltip: tooltip, footer: { content: "sumCol", css:{ "text-align":"center" }  } });
+  columnsTable.push({ id: 'worthBTC',	header: { text: 'worthBTC', css:{ "text-align":"center" } }, cssFormat: alignRight, sort: "int", autowidth: true, adjust: true, tooltip: tooltip, footer: { content: "sumCol", css: { "text-align":"center" }  } });
   balances.forEach(account => {
     let balanceRow = {
       accountName: account.accountName,
@@ -131,7 +131,14 @@ let updateBalanceTable = function updateBalanceTable(balances) {
           return column.id === currencyBalance.currency
         });
         if (!currencyColumn) {
-          columnsTable.push({ id: currencyBalance.currency,	header: { text: currencyBalance.currency, css:{ "text-align":"center" } }, cssFormat: alignRight, adjust:true, tooltip: tooltip, footer: { content: "sumCol", css:{ "text-align":"center" }  } })
+          columnsTable.push({
+            id: currencyBalance.currency,
+            header: { text: currencyBalance.currency, css: { "text-align":"center" } },
+            cssFormat: alignRight,
+            adjust: true,
+            tooltip: tooltip,
+            footer: { content: "sumCol", css:{ "text-align":"center" } },
+          });
         }
       });
     } else {
