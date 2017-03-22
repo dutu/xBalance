@@ -2,7 +2,7 @@ const async  = require ('async');
 const _ = require ('lodash');
 const Cryptox = require('cryptox');
 const Big = require('big.js');
-
+const blockexplorer = require('blockchain.info').blockexplorer;
 const log = require('./logger').log;
 const accounts = require('../accounts.js').accounts;
 
@@ -45,66 +45,97 @@ let getRate = function getRate(cryptox, currencyA, currencyB, callback) {
 
 
 let getAccountBalance = function (balances, account, callback) {
-  let cryptox = new Cryptox(account.exchange, { key: account.api.key, secret: account.api.secret, username: account.api.clientId, passphrase: account.api.passphrase });
-  let options = account.exchange === 'poloniex' && { account: 'all' } || {};
-  cryptox.getBalance(options, function (err, balance) {
-    let result = {
-      exchange: account.exchange,
-      accountName: account.accountName,
-      timestamp: Date.now(),
-    };
-    if (err) {
-      log.error(`Account name: ${account.accountName}, getBalance() error: ${err.message}`);
-      result.error = err.message;
-      balances.push(result);
-      return callback(null, balances);
+  switch (account.exchange) {
+    case 'BTC wallet': {
+      let result = {
+        exchange: account.exchange,
+        accountName: account.accountName,
+      };
+      blockexplorer.getMultiAddress(account.addresses)
+        .then(function(response) {
+          result.timestamp = Date.now();
+          result.subAccount = '';
+          result.totalBalance = [];
+          let totalBTC = response.addresses.reduce((totalFinal_balance, address) => {
+            return totalFinal_balance += address.final_balance;
+          }, 0) / 100000000;
+          result.totalBalance.push({ currency: 'BTC', amount: totalBTC.toFixed(8), worthBTC: totalBTC.toFixed(8) });
+          balances.push(result);
+          return callback(null, balances);
+        })
+        .catch(function (errorMessage) {
+          result.timestamp = Date.now();
+          log.error(`Account name: ${account.accountName}, getBalance() error: ${errorMessage}`);
+          result.error = errorMessage;
+          balances.push(result);
+          return callback(null, balances);
+        });
+      break;
     }
 
-    async.each(balance.data,
-      function (subAccountBalance, callback) {
+    default: {
+      let cryptox = new Cryptox(account.exchange, { key: account.api.key, secret: account.api.secret, username: account.api.clientId, passphrase: account.api.passphrase });
+      let options = account.exchange === 'poloniex' && { account: 'all' } || {};
+      cryptox.getBalance(options, function (err, balance) {
         let result = {
-          accountName: account.accountName,
           exchange: account.exchange,
+          accountName: account.accountName,
+          timestamp: Date.now(),
         };
-        if (subAccountBalance.account_id) {
-          result.subAccount = subAccountBalance.account_id;
+        if (err) {
+          log.error(`Account name: ${account.accountName}, getBalance() error: ${err.message}`);
+          result.error = err.message;
+          balances.push(result);
+          return callback(null, balances);
         }
 
-        result.timestamp = Date.now();
-        result.totalBalance = [];
-        async.each(subAccountBalance.total,
-          function (currencyBalance, callback) {
-            let amount = new Big(currencyBalance.amount);
-            if (!amount.eq(0)) {
-              getRate(cryptox, currencyBalance.currency, 'BTC', function (rate) {
-                let worthBTC = 0;
-                if (rate) {
-                  worthBTC = amount.times(rate).toFixed(8);
+        async.each(balance.data,
+          function (subAccountBalance, callback) {
+            let result = {
+              accountName: account.accountName,
+              exchange: account.exchange,
+            };
+            if (subAccountBalance.account_id) {
+              result.subAccount = subAccountBalance.account_id;
+            }
+
+            result.timestamp = Date.now();
+            result.totalBalance = [];
+            async.each(subAccountBalance.total,
+              function (currencyBalance, callback) {
+                let amount = new Big(currencyBalance.amount);
+                if (!amount.eq(0)) {
+                  getRate(cryptox, currencyBalance.currency, 'BTC', function (rate) {
+                    let worthBTC = 0;
+                    if (rate) {
+                      worthBTC = amount.times(rate).toFixed(8);
+                    }
+
+                    result.totalBalance.push({ currency: currencyBalance.currency === 'XBT' && 'BTC' || currencyBalance.currency, amount: amount.toFixed(8), worthBTC: worthBTC });
+                    callback(null);
+                  });
+                } else {
+                  callback(null);
+                }
+              },
+
+              function (err) {
+                if (result.totalBalance.length > 0) {
+                  balances.push(result);
                 }
 
-                result.totalBalance.push({ currency: currencyBalance.currency === 'XBT' && 'BTC' || currencyBalance.currency, amount: amount.toFixed(8), worthBTC: worthBTC });
-                callback(null);
-              });
-            } else {
-              callback(null);
-            }
+                callback(err);
+              }
+            );
           },
 
           function (err) {
-            if (result.totalBalance.length > 0) {
-              balances.push(result);
-            }
-
-            callback(err);
+            callback(null, balances);
           }
         );
-      },
-
-      function (err) {
-        callback(null, balances);
-      }
-    );
-  });
+      });
+    }
+  };
 };
 
 export const getAccountsBalance = function getAccountsBalance(callback) {

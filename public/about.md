@@ -1,4 +1,4 @@
-## xBalance - get your accounts balance from multiple cryptocurency exchanges
+## xBalance: get your accounts balance from multiple cryptocurency exchanges
 
 **xBalance** is a node.js app for getting your accounts balance from multiple cryptocurency exchanges.
 
