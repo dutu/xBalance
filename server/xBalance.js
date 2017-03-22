@@ -61,14 +61,14 @@ let getAccountBalance = function (balances, account, callback) {
           }, 0) / 100000000;
           result.totalBalance.push({ currency: 'BTC', amount: totalBTC.toFixed(8), worthBTC: totalBTC.toFixed(8) });
           balances.push(result);
-          return callback(null, balances);
+          return callback(null);
         })
         .catch(function (errorMessage) {
           result.timestamp = Date.now();
           log.error(`Account name: ${account.accountName}, getBalance() error: ${errorMessage}`);
           result.error = errorMessage;
           balances.push(result);
-          return callback(null, balances);
+          return callback(null);
         });
       break;
     }
@@ -86,7 +86,7 @@ let getAccountBalance = function (balances, account, callback) {
           log.error(`Account name: ${account.accountName}, getBalance() error: ${err.message}`);
           result.error = err.message;
           balances.push(result);
-          return callback(null, balances);
+          return callback(null);
         }
 
         async.each(balance.data,
@@ -130,7 +130,7 @@ let getAccountBalance = function (balances, account, callback) {
           },
 
           function (err) {
-            callback(null, balances);
+            callback(null);
           }
         );
       });
@@ -144,11 +144,16 @@ export const getAccountsBalance = function getAccountsBalance(callback) {
     process.exit(1);
   }
 
-  async.reduce(accounts, [], getAccountBalance, function(err, result) {
-    if( err ) {
-      log.crit(`Failed to process. Error: ${err.message}`);
-    }
+  let balances = [];
+  async.each(accounts,
+    function (account, callback) {
+      getAccountBalance(balances, account, callback);
+    },
+    function (err)  {
+      if( err ) {
+        log.crit(`Failed to process. Error: ${err.message}`);
+      }
 
-    callback(result);
-  });
+      callback(balances);
+    })
 };
