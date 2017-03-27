@@ -82,7 +82,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-let port = process.env.PORT || '3000';
+let port = process.env.XBALANCE_PORT || '3000';
 app.set('port', port);
 let server = http.createServer(app);
 server.listen(port);
@@ -92,8 +92,9 @@ server.on('listening', onListening);
 let fayeServer = http.createServer();
 let bayeux = new Faye.NodeAdapter({mount: '/'});
 bayeux.attach(fayeServer);
+bayeux.on('handshake', function(clientId) {
+  log.info(`Client connected:, ${clientId}`);
+});
 fayeServer.listen(8000);
-fayeServer.on('error', onError);
-fayeServer.on('listening', onListening);
 
 publish();

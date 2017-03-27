@@ -22,12 +22,12 @@ export let publish = function publish() {
 
   client.subscribe('/settings', function(message) {
     settings = message.settings;
-    log.info('Got settings from browser client');
+    //log.info('Got settings from browser client');
   });
 
   client.subscribe('/getBalances', function(message) {
     settings = message.settings;
-    log.info('Requested balances from browser client');
+    log.info('Balances requested from browser');
     updateClients(client);
   });
 
