@@ -1,6 +1,5 @@
 'use strict';
 
-const debug = require('debug')('exchangebalance:server');
 import express from 'express';
 import path from 'path';
 //import favicon from 'serve-favicon';
@@ -8,12 +7,13 @@ import logger from 'morgan';
 //import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import http from 'http';
-import { log } from './server/logger';
 
+import { log } from './server/logger';
 import { router as index } from './routes/index';
 import { api } from './routes/api';
 import { publish } from './server/publish';
 
+const debug = require('debug')('xbalance');
 const Faye = require('faye');
 
 const onError = function onError(error) {
@@ -93,7 +93,7 @@ let fayeServer = http.createServer();
 let bayeux = new Faye.NodeAdapter({mount: '/'});
 bayeux.attach(fayeServer);
 bayeux.on('handshake', function(clientId) {
-  log.info(`Client connected:, ${clientId}`);
+  debug(`Client connected:, ${clientId}`);
 });
 fayeServer.listen(8000);
 

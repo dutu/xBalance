@@ -43,7 +43,6 @@ let getRate = function getRate(cryptox, currencyA, currencyB, callback) {
   });
 };
 
-
 let getAccountBalance = function (balances, account, callback) {
   switch (account.exchange) {
     case 'BTC wallet': {
@@ -120,10 +119,7 @@ let getAccountBalance = function (balances, account, callback) {
               },
 
               function (err) {
-                if (result.totalBalance.length > 0) {
-                  balances.push(result);
-                }
-
+                balances.push(result);
                 callback(err);
               }
             );
@@ -135,7 +131,7 @@ let getAccountBalance = function (balances, account, callback) {
         );
       });
     }
-  };
+  }
 };
 
 export const getAccountsBalance = function getAccountsBalance(callback) {

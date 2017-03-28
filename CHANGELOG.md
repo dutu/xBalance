@@ -4,6 +4,13 @@ All notable changes to this module are documented in this file.
 poloLender application adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.1.2] - 2017-03-28
+
+### Changed
+- Accounts with balance zero are shown with balance zero (previusly were not shown in the list)
+- Update debug 
+
+
 ## [0.1.1] - 2017-03-27
 
 ### Changed
