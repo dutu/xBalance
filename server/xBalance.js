@@ -4,7 +4,15 @@ const Cryptox = require('cryptox');
 const Big = require('big.js');
 const blockexplorer = require('blockchain.info').blockexplorer;
 const log = require('./logger').log;
-const accounts = require('../accounts.js').accounts;
+let accounts;
+
+try {
+  accounts = require('../accounts.js');
+}
+catch (e) {
+  log.crit(`'accounts.js' not found. \nPlease rename the file 'accounts-template.js' to 'accounts.js', then update it with your own values.`);
+  process.exit(2);
+}
 
 let rates = [];
 
@@ -26,7 +34,7 @@ let getRate = function getRate(cryptox, currencyA, currencyB, callback) {
   }
 
   cryptox.getRate({ pair: `${currA}_${currB}` }, function (err, res) {
-    if (!err && res.error === '') {
+    if (!err && res.error === '' && res.data[0]) {
       rates.push({pair: `${currA}_${currB}`, rate: res.data[0].rate});
       callback(res.data[0].rate)
     } else {
@@ -73,7 +81,23 @@ let getAccountBalance = function (balances, account, callback) {
     }
 
     default: {
-      let cryptox = new Cryptox(account.exchange, { key: account.api.key, secret: account.api.secret, username: account.api.clientId, passphrase: account.api.passphrase });
+      let cryptox;
+      try {
+        cryptox = new Cryptox(account.exchange, { key: account.api.key, secret: account.api.secret, username: account.api.clientId, passphrase: account.api.passphrase });
+      }
+      catch (err) {
+        let errMessage = `Exchange "${account.exchange}" is not supported. Please check xBalance documentation at https://github.com/dutu/xBalance/`;
+        let result = {
+          exchange: account.exchange,
+          accountName: account.accountName,
+          timestamp: Date.now(),
+          error: errMessage,
+        };
+        log.error(errMessage);
+        balances.push(result);
+        return callback(null);
+      }
+
       let options = account.exchange === 'poloniex' && { account: 'all' } || {};
       cryptox.getBalance(options, function (err, balance) {
         let result = {
@@ -134,7 +158,7 @@ let getAccountBalance = function (balances, account, callback) {
   }
 };
 
-export const getAccountsBalance = function getAccountsBalance(callback) {
+const getAccountsBalance = function getAccountsBalance(callback) {
   if (!_.isArray(accounts)) {
     log.crit(`configuration file accounts.js is invalid! Please correct the configuration and restart the application.`);
     process.exit(1);
@@ -153,3 +177,5 @@ export const getAccountsBalance = function getAccountsBalance(callback) {
       callback(balances);
     })
 };
+
+module.exports.getAccountsBalance = getAccountsBalance;

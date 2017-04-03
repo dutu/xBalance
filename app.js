@@ -1,39 +1,39 @@
 'use strict';
 
-import express from 'express';
-import path from 'path';
-//import favicon from 'serve-favicon';
-import logger from 'morgan';
-//import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-import http from 'http';
-
-import { log } from './server/logger';
-import { router as index } from './routes/index';
-import { api } from './routes/api';
-import { publish } from './server/publish';
-
 const debug = require('debug')('xbalance');
+const express = require('express');
+const path  = require('path');
+//import favicon from 'serve-favicon';
+const logger = require('morgan');
+//import cookieParser from 'cookie-parser';
+const bodyParser = require('body-parser');
+const http = require('http');
 const Faye = require('faye');
+const _ = require('lodash');
+const os = require('os');
+
+let log = require('./server/logger').log;
+let index = require('./routes/index').router;
+let api = require('./routes/api').api;
+let publish = require('./server/publish').publish;
 
 const onError = function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  let bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  let port = this;
+  let bind = _.isString(port) && `Pipe ${port}` || `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES': {
-      log.crit(`${bind} requires elevated privileges`);
+      log.crit(`${bind} requires elevated privileges.\n App will now exit!`);
       process.exit(1);
       break;
     }
     case 'EADDRINUSE': {
-      log.crit(`${bind} is already in use`);
+      log.crit(`${bind} is already in use.\n App will now exit!`);
       process.exit(1);
       break;
     }
@@ -44,10 +44,9 @@ const onError = function onError(error) {
 };
 
 const onListening = function onListening() {
+  let server = this;
   const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  let bind = _.isString(addr) && `Pipe ${addr}` || `Port ${addr.port}`;
   log.info(`Listening on ${bind}`);
 };
 
@@ -82,19 +81,28 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-let port = process.env.XBALANCE_PORT || '3000';
-app.set('port', port);
-let server = http.createServer(app);
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+let httpPort = process.env.XBALANCE_PORT || '4000';
+app.set('port', httpPort);
+let httpServer = http.createServer(app);
+let onErrorHttp = _.bind(onError, httpPort);
+httpServer.on('error', onErrorHttp);
+let onListeningHttp = _.bind(onListening, httpServer);
+httpServer.on('listening', onListening);
+httpServer.listen(httpPort);
 
+let fayePort = '8000';
 let fayeServer = http.createServer();
 let bayeux = new Faye.NodeAdapter({mount: '/'});
 bayeux.attach(fayeServer);
 bayeux.on('handshake', function(clientId) {
   debug(`Client connected:, ${clientId}`);
 });
-fayeServer.listen(8000);
+let onErrorFaye = _.bind(onError, fayePort);
+fayeServer.on('error', onErrorFaye);
+let onListeningFaye = _.bind(onListening, fayeServer);
+fayeServer.on('listening', onListeningFaye);
+fayeServer.listen(fayePort);
 
+let hostname = os.hostname();
+log.info(`App running at: http://${hostname}:${httpPort}/`)
 publish();

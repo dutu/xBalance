@@ -1,8 +1,8 @@
 'use strict';
 
-import winston from 'winston';
+const winston = require('winston');
 
-export let log = new (winston.Logger)({
+let log = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
       colorize: 'all'
@@ -11,3 +11,5 @@ export let log = new (winston.Logger)({
 });
 
 log.setLevels(winston.config.syslog.levels);
+
+module.exports.log = log;

@@ -31,7 +31,7 @@
     "npm": "4.1.x"
   },
   "scripts": {
-    "start": "node -r babel-register app.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "async": "^2.1.5",
@@ -54,6 +54,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.0",
     "babel-preset-env": "^1.2.2",
-    "babel-preset-es2015": "^6.24.0"
+    "babel-preset-es2015": "^6.24.0",
+    "babel-register": "^6.24.0"
   }
 }

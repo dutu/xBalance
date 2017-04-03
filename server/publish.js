@@ -14,7 +14,7 @@ const updateClients = function updateClients(fayeClient) {
 };
 
 
-export let publish = function publish() {
+let publish = function publish() {
   let hostname = os.hostname();
   let client = new Faye.Client(`http://${hostname}:8000/`);
   let settings;
@@ -31,9 +31,7 @@ export let publish = function publish() {
     updateClients(client);
   });
 
-
-
-
 //  setInterval(upd, 5000);
-
 };
+
+module.exports.publish = publish;

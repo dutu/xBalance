@@ -33,6 +33,19 @@ The application gets the balance of your accounts from multiple cryptocurency ex
 ![](http://i.imgur.com/HiX3yz4.jpg)
 
 
+# Supported exchanges
+
+|Exchange name or wallet | slug <sup>[1]</sup> | Authentication               |
+| ---	                 |    ---             |    ---                       |
+| Bitfinex               | `"bitfinex"`       | `key`, `secret`              |
+| Bitstamp               | `"bitstamp"`       | `key`, `secret`, `username`  |
+| BitX                   | `"bitx"`           | `key`, `secret`              |
+| Gdax                   | `"gdax"`           | `key`, `secret`, `passphrase`|
+| Poloniex               | `"poloniex"`       | `key`, `secret`              |
+| BTC wallet             | `"BTC wallet"`     | -                            |
+
+><sup>[1]</sup> values to be used for `exchange` in the `account.js` file (see step 5 below)
+
 
 # Setting up the application
 

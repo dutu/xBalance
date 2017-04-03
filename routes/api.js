@@ -1,9 +1,11 @@
+'use strict';
+
 const _ = require('lodash');
 const moment = require('moment');
 
 const getAccountsBalance =  require ('../server/xBalance').getAccountsBalance;
 
-export let api = {};
+let api = {};
 
 api.getBalances = function getBalances(req, res) {
 	getAccountsBalance(function (result) {
@@ -16,3 +18,5 @@ api.getBalances = function getBalances(req, res) {
     res.json(response);
   });
 };
+
+module.exports.api = api;
