@@ -10,8 +10,12 @@ try {
   accounts = require('../accounts.js');
 }
 catch (e) {
-  log.crit(`'accounts.js' not found. \nPlease rename the file 'accounts-template.js' to 'accounts.js', then update it with your own values.`);
-  process.exit(2);
+  if (e.code === 'MODULE_NOT_FOUND') {
+    log.crit(`'accounts.js' not found. \nPlease rename the file 'accounts-template.js' to 'accounts.js', then update it with your own values.`);
+    process.exit(2);
+  } else {
+    throw e;
+  }
 }
 
 let rates = [];

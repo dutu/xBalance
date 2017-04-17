@@ -1,6 +1,6 @@
 {
   "name": "xBalance",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "node.js app for getting your accounts balance from multiple cryptocurency exchanges",
   "author": "Adrian Clinciu <adrian.clinciu@outlook.com>",
   "license": "MIT",
