@@ -54,7 +54,7 @@ const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -81,7 +81,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-let httpPort = process.env.XBALANCE_PORT || '4000';
+let httpPort = process.env.PORT || '4000';
 app.set('port', httpPort);
 let httpServer = http.createServer(app);
 let onErrorHttp = _.bind(onError, httpPort);

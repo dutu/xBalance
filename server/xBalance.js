@@ -1,22 +1,11 @@
+import { accounts } from '../accounts.js';
+
 const async  = require ('async');
 const _ = require ('lodash');
 const Cryptox = require('cryptox');
 const Big = require('big.js');
 const blockexplorer = require('blockchain.info').blockexplorer;
 const log = require('./logger').log;
-let accounts;
-
-try {
-  accounts = require('../accounts.js');
-}
-catch (e) {
-  if (e.code === 'MODULE_NOT_FOUND') {
-    log.crit(`'accounts.js' not found. \nPlease rename the file 'accounts-template.js' to 'accounts.js', then update it with your own values.`);
-    process.exit(2);
-  } else {
-    throw e;
-  }
-}
 
 let rates = [];
 

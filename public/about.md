@@ -21,9 +21,9 @@ Rename the file `accounts-template.js` to `accounts.js`, then update the file wi
  
 ## Check your balances
 
-* Get your balances by opening http://localhost:3000/ with your internet browser
+* Get your balances by opening http://localhost:4000/ with your internet browser
 
-* Get your balances raw data by opening http://localhost:3000/api/getBalances with your internet browser
+* Get your balances raw data by opening http://localhost:4000/api/getBalances with your internet browser
 
      
 ## FAQ

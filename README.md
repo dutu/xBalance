@@ -76,9 +76,9 @@ The application gets the balance of your accounts from multiple cryptocurency ex
     npm start
     ```
 
-7. Get your balances by opening http://localhost:3000/ with your internet browser
+7. Get your balances by opening http://localhost:4000/ with your internet browser
 
-8. Get your balances raw data by opening http://localhost:3000/api/getBalances with your internet browser
+8. Get your balances raw data by opening http://localhost:4000/api/getBalances with your internet browser
 
     
 ## Running on Heroku
